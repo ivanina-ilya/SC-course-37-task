@@ -17,12 +17,6 @@ public class UserServiceImpl extends DomainStore<User> implements UserService {
 
     private Properties properties;
 
-    @Nullable
-    @Override
-    public User getUserByEmail(String email) {
-        return getAll().stream().filter(user -> user.getEmail().equalsIgnoreCase(email)).findFirst().get();
-    }
-
     private void init() {
         Arrays.asList( properties.getProperty("elements.list").split(",") )
                 .forEach( marker -> {
@@ -31,9 +25,25 @@ public class UserServiceImpl extends DomainStore<User> implements UserService {
                             properties.getProperty(marker+".firstName"),
                             properties.getProperty(marker+".lastName"),
                             properties.getProperty(marker+".email")
-                            );
+                    );
                     save(user);
                 } );
+    }
+
+    @Nullable
+    @Override
+    public User getUserByEmail(String email) {
+        return getAll().stream()
+                .filter(user -> user.getEmail().equalsIgnoreCase(email))
+                .findFirst().orElse(null);
+    }
+
+    @Override
+    public Long save(User user) {
+        User validate = getUserByEmail(user.getEmail());
+        if(validate != null && !validate.getId().equals(user.getId()))
+            throw new IllegalArgumentException("Duplicate User by Email ["+user.getEmail()+"]");
+        return super.save(user);
     }
 
     public void setProperties(Properties properties) {

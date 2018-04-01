@@ -18,7 +18,7 @@ public class AuditoriumServiceImpl extends DomainStore<Auditorium> implements Au
     @Nullable
     @Override
     public Auditorium getByName(String name) {
-        return getAll().stream().filter(auditorium -> auditorium.getName().equals(name)).findFirst().get();
+        return getAll().stream().filter(auditorium -> auditorium.getName().equals(name)).findFirst().orElse(null);
     }
 
     private void init() {

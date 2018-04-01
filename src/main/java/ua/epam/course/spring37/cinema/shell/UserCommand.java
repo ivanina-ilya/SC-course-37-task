@@ -7,10 +7,15 @@ import ua.epam.course.spring37.cinema.service.UserService;
 import javax.annotation.Resource;
 
 
-public class UserCommand  {
+public class UserCommand /*implements CommandMarker*/ {
 
     @Resource(name="userService")
     private UserService service;
+
+    //@CliAvailabilityIndicator({"addUser"})
+    public boolean isCommandAvailable() {
+        return true;
+    }
 
     //@ShellMethod("Add new user")
     public String addUser(String firstName, String lastName, String email) {

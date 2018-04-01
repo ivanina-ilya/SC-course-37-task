@@ -46,7 +46,7 @@ public class EventServiceImpl extends DomainStore<Event> implements EventService
     @Nullable
     @Override
     public Event getByName(String name) {
-        return getAll().stream().filter(user -> user.getName().equalsIgnoreCase(name)).findFirst().get();
+        return getAll().stream().filter(user -> user.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
     @Override
@@ -80,6 +80,8 @@ public class EventServiceImpl extends DomainStore<Event> implements EventService
                 .filter( air -> air.isAfter(now))
                 .collect(Collectors.toSet());
     }
+
+
 
     public void setProperties(Properties properties) {
         this.properties = properties;
