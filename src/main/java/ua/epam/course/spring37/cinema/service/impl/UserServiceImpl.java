@@ -49,7 +49,4 @@ public class UserServiceImpl extends DomainStore<User> implements UserService {
         return super.save(user);
     }
 
-    /*public void setProperties(Properties properties) {
-        this.properties = properties;
-    }*/
 }

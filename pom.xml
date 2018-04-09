@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.epam.illya_Ivanina</groupId>
-    <artifactId>course-SC-37-task-1</artifactId>
+    <artifactId>course-SC-37</artifactId>
     <version>1.0-SNAPSHOT</version>
 
 
@@ -13,6 +13,8 @@
         <java.version>1.8</java.version>
         <spring.version>5.0.4.RELEASE</spring.version>
         <junit.version>4.12</junit.version>
+        <aspectj.version>1.8.13</aspectj.version>
+        <log4j.version>1.2.17</log4j.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -21,6 +23,12 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
         </dependency>
 
         <!--<dependency>
@@ -48,6 +56,12 @@
             <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+
     </dependencies>
 
     <!--<build>

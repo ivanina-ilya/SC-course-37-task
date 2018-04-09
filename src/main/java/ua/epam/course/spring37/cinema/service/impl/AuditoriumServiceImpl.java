@@ -39,8 +39,4 @@ public class AuditoriumServiceImpl extends DomainStore<Auditorium> implements Au
                     save(auditorium);
                 });
     }
-
-    /*public void setProperties(Properties properties) {
-        this.properties = properties;
-    }*/
 }

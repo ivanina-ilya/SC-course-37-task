@@ -1,5 +1,8 @@
 package ua.epam.course.spring37.cinema.service.impl;
 
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
 import ua.epam.course.spring37.cinema.dao.DomainStore;
@@ -18,6 +21,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class EventServiceImpl extends DomainStore<Event> implements EventService {
+
+    @Autowired
+    @Qualifier("log")
+    private Logger log;
 
     @Value("#{defaultEvensProps}")
     private Properties properties;
@@ -87,11 +94,4 @@ public class EventServiceImpl extends DomainStore<Event> implements EventService
 
 
 
-    /*public void setProperties(Properties properties) {
-        this.properties = properties;
-    }
-
-    public void setAuditoriumService(AuditoriumService auditoriumService) {
-        this.auditoriumService = auditoriumService;
-    }*/
 }

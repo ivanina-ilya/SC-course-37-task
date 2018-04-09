@@ -1,13 +1,20 @@
 package ua.epam.course.spring37.cinema;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.spi.LoggerFactory;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.io.ClassPathResource;
 import ua.epam.course.spring37.cinema.service.*;
 import ua.epam.course.spring37.cinema.service.impl.*;
 
+
 @Configuration
+@ComponentScan("ua.epam.course.spring37.cinema.aspects")
+@EnableAspectJAutoProxy
 public class ApplicationSpringConfig {
     @Bean(name = "auditoriumProps")
     public PropertiesFactoryBean auditoriumProps() {
@@ -26,6 +33,12 @@ public class ApplicationSpringConfig {
         PropertiesFactoryBean bean = new PropertiesFactoryBean();
         bean.setLocation(new ClassPathResource("defaultUsers.properties"));
         return bean;
+    }
+
+
+    @Bean(name = "log")
+    public Logger logger() {
+        return Logger.getLogger("application");
     }
 
     @Bean(name = "userService")
@@ -52,5 +65,6 @@ public class ApplicationSpringConfig {
     public BookingService BookingService(){
         return new BookingServiceImpl();
     }
+
 
 }

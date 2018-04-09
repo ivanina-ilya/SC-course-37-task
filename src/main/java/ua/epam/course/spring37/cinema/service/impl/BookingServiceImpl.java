@@ -98,20 +98,4 @@ public class BookingServiceImpl extends DomainStore<Ticket> implements BookingSe
 
 
 
-
-
-
-    /*public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    public void setDiscountService(DiscountService discountService) {
-        this.discountService = discountService;
-    }
-
-    public void setEventService(EventService eventService) {
-        this.eventService = eventService;
-    }*/
-
-
 }
