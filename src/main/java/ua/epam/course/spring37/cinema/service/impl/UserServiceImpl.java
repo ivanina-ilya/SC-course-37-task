@@ -8,6 +8,7 @@ import ua.epam.course.spring37.cinema.domain.EventRating;
 import ua.epam.course.spring37.cinema.domain.User;
 import ua.epam.course.spring37.cinema.service.UserService;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.Properties;
@@ -15,8 +16,10 @@ import java.util.Properties;
 
 public class UserServiceImpl extends DomainStore<User> implements UserService {
 
+    @Value("#{defaultUsers}")
     private Properties properties;
 
+    @PostConstruct
     private void init() {
         Arrays.asList( properties.getProperty("elements.list").split(",") )
                 .forEach( marker -> {
@@ -46,7 +49,7 @@ public class UserServiceImpl extends DomainStore<User> implements UserService {
         return super.save(user);
     }
 
-    public void setProperties(Properties properties) {
+    /*public void setProperties(Properties properties) {
         this.properties = properties;
-    }
+    }*/
 }

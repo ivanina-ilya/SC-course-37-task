@@ -1,5 +1,8 @@
 package ua.epam.course.spring37.cinema.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
 import ua.epam.course.spring37.cinema.dao.DomainStore;
 import ua.epam.course.spring37.cinema.domain.Event;
@@ -18,8 +21,16 @@ import java.util.stream.Collectors;
 
 public class BookingServiceImpl extends DomainStore<Ticket> implements BookingService {
 
+    @Autowired
+    @Qualifier("userService")
     private UserService userService;
+
+    @Autowired
+    @Qualifier("discountService")
     private DiscountService discountService;
+
+    @Autowired
+    @Qualifier("eventsService")
     private EventService eventService;
 
 
@@ -90,7 +101,7 @@ public class BookingServiceImpl extends DomainStore<Ticket> implements BookingSe
 
 
 
-    public void setUserService(UserService userService) {
+    /*public void setUserService(UserService userService) {
         this.userService = userService;
     }
 
@@ -100,7 +111,7 @@ public class BookingServiceImpl extends DomainStore<Ticket> implements BookingSe
 
     public void setEventService(EventService eventService) {
         this.eventService = eventService;
-    }
+    }*/
 
 
 }

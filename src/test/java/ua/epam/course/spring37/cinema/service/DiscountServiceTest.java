@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import ua.epam.course.spring37.cinema.ApplicationSpringConfig;
 import ua.epam.course.spring37.cinema.domain.Event;
 import ua.epam.course.spring37.cinema.domain.EventRating;
 import ua.epam.course.spring37.cinema.domain.User;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:spring.xml") // will be use test spring.xml
+@ContextConfiguration(classes = ApplicationSpringConfig.class) // will be use test config
 public class DiscountServiceTest {
 
     private DiscountService discountService;

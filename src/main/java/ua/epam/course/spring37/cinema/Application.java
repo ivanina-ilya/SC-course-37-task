@@ -1,6 +1,8 @@
 package ua.epam.course.spring37.cinema;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ua.epam.course.spring37.cinema.service.AuditoriumService;
 import ua.epam.course.spring37.cinema.service.EventService;
@@ -13,7 +15,7 @@ import ua.epam.course.spring37.cinema.service.impl.UserServiceImpl;
 public class Application {
     public static void main(String[] args) {
 
-        ConfigurableApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        ApplicationContext ctx = new AnnotationConfigApplicationContext(ApplicationSpringConfig.class);
 
         UserService userService = ctx.getBean("userService", UserServiceImpl.class);
         AuditoriumService auditoriumService = ctx.getBean("auditoriumService", AuditoriumServiceImpl.class);
@@ -39,6 +41,6 @@ public class Application {
 
 
 
-        ctx.close();
+        //ctx.close();
     }
 }

@@ -6,6 +6,7 @@ import ua.epam.course.spring37.cinema.dao.DomainStore;
 import ua.epam.course.spring37.cinema.domain.Auditorium;
 import ua.epam.course.spring37.cinema.service.AuditoriumService;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.lang.reflect.Array;
 import java.util.*;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 
 public class AuditoriumServiceImpl extends DomainStore<Auditorium> implements AuditoriumService {
 
+    @Value("#{auditoriumProps}")
     private Properties properties;
 
     @Nullable
@@ -21,6 +23,7 @@ public class AuditoriumServiceImpl extends DomainStore<Auditorium> implements Au
         return getAll().stream().filter(auditorium -> auditorium.getName().equals(name)).findFirst().orElse(null);
     }
 
+    @PostConstruct
     private void init() {
         Arrays.asList(properties.getProperty("elements.list").split(","))
                 .forEach(marker -> {
@@ -37,7 +40,7 @@ public class AuditoriumServiceImpl extends DomainStore<Auditorium> implements Au
                 });
     }
 
-    public void setProperties(Properties properties) {
+    /*public void setProperties(Properties properties) {
         this.properties = properties;
-    }
+    }*/
 }

@@ -8,6 +8,7 @@ import ua.epam.course.spring37.cinema.domain.EventRating;
 import ua.epam.course.spring37.cinema.service.AuditoriumService;
 import ua.epam.course.spring37.cinema.service.EventService;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,10 +19,13 @@ import java.util.stream.Collectors;
 
 public class EventServiceImpl extends DomainStore<Event> implements EventService {
 
+    @Value("#{defaultEvensProps}")
     private Properties properties;
+
+    @Value("#{auditoriumService}")
     private AuditoriumService auditoriumService;
 
-
+    @PostConstruct
     private void init() {
         Arrays.asList( properties.getProperty("elements.list").split(",") )
                 .forEach( marker -> {
@@ -83,11 +87,11 @@ public class EventServiceImpl extends DomainStore<Event> implements EventService
 
 
 
-    public void setProperties(Properties properties) {
+    /*public void setProperties(Properties properties) {
         this.properties = properties;
     }
 
     public void setAuditoriumService(AuditoriumService auditoriumService) {
         this.auditoriumService = auditoriumService;
-    }
+    }*/
 }
