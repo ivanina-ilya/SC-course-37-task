@@ -3,6 +3,7 @@ package org.ivanina.course.spring37.cinema.service;
 import org.apache.log4j.Logger;
 import org.ivanina.course.spring37.cinema.config.ApplicationSpringConfig;
 import org.ivanina.course.spring37.cinema.aspects.CounterAspect;
+import org.ivanina.course.spring37.cinema.config.JdbcConfig;
 import org.ivanina.course.spring37.cinema.domain.Event;
 import org.junit.After;
 import org.junit.Before;
@@ -12,10 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = ApplicationSpringConfig.class) // will be use test config
+@ContextConfiguration(classes = {ApplicationSpringConfig.class, JdbcConfig.class})
 public class EventServiceTest {
 
     private Logger log = Logger.getLogger(EventServiceTest.class);
@@ -29,11 +34,6 @@ public class EventServiceTest {
     @Autowired
     private CounterAspect counterAspect;
 
-    @Before
-    public void init() {
-        // initialization in init method on service by default data from properties
-        // SEE TO: defaultEvens.properties
-    }
 
     @After
     public void  afterEach(){
@@ -42,11 +42,13 @@ public class EventServiceTest {
 
     @Test
     public void getByNameTest(){
-        String name = "Harry Potter";
-        Event event = eventService.getByName(name);
+        Set<Event> eventList = eventService.getAll();
+        Event event = eventList.stream().findFirst().get();
 
-        assertEquals(event.getName(),name);
-        assertNotNull(event.getId());
+        Event eventByName = eventService.getByName( event.getName() );
+
+        assertEquals(event.getName(),eventByName.getName());
+        assertNotNull(eventByName.getId());
     }
 
     @Test

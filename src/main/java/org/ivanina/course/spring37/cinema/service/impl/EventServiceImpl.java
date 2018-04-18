@@ -1,5 +1,9 @@
 package org.ivanina.course.spring37.cinema.service.impl;
 
+import org.ivanina.course.spring37.cinema.dao.EventDao;
+import org.ivanina.course.spring37.cinema.dao.UserDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
 import org.ivanina.course.spring37.cinema.dao.DomainStore;
@@ -15,45 +19,24 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class EventServiceImpl extends DomainStore<Event> implements EventService {
+public class EventServiceImpl  implements EventService {
 
-    @Value("#{defaultEvensProps}")
-    private Properties properties;
+    @Autowired
+    @Qualifier("eventDao")
+    private EventDao eventDao;
 
-    @Value("#{auditoriumService}")
-    private AuditoriumService auditoriumService;
 
-    @PostConstruct
-    private void init() {
-        Arrays.asList( properties.getProperty("elements.list").split(",") )
-                .forEach( marker -> {
-                    marker = marker.trim();
-                    Event event = new Event(properties.getProperty(marker+".name"));
-                    event.setBasePrice( Double.parseDouble( properties.getProperty(marker+".basePrice")) );
-                    event.setRating(EventRating.valueOf( properties.getProperty(marker+".rating")) );
-
-                    Arrays.asList(properties.getProperty(marker+".airDates").split(","))
-                            .forEach( air -> {
-                                String[] item = air.trim().split("\\|");
-                                event.addAirDateTime(
-                                        LocalDateTime.parse(item[1]),
-                                        auditoriumService.getByName(item[0])
-                                );
-                            } );
-
-                    save(event);
-                } );
-    }
 
     @Nullable
     @Override
     public Event getByName(String name) {
-        return getAll().stream().filter(user -> user.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+        return eventDao.getByName(name);
     }
 
     @Override
     public Set<Event> getForDateRange(LocalDateTime from, LocalDateTime to) {
-        return getAll().stream()
+        // TODO: to be refactored! Without getAll
+        return eventDao.getAll().stream()
                 .filter( event -> event.getAirDates().stream()
                         .anyMatch( air -> air.isAfter(from) || air.isEqual(from) ) )
                 .filter( event -> event.getAirDates().stream()
@@ -69,7 +52,7 @@ public class EventServiceImpl extends DomainStore<Event> implements EventService
     @Override
     public Set<Event> getAvailableEvents() {
         LocalDateTime now = LocalDateTime.now();
-        return getAll().stream()
+        return eventDao.getAll().stream()
                 .filter( event -> event.getAirDates().stream()
                         .anyMatch( air -> air.isAfter(now)  ) )
                 .collect(Collectors.toSet());
@@ -86,5 +69,36 @@ public class EventServiceImpl extends DomainStore<Event> implements EventService
     @Override
     public Event getNewEvent(String name) {
         return new Event(name);
+    }
+
+
+    @Override
+    public Set<Event> getAll() {
+        return eventDao.getAll();
+    }
+
+    @Override
+    public Event get(Long id) {
+        return eventDao.get(id);
+    }
+
+    @Override
+    public Long save(Event entity) {
+        return eventDao.save(entity);
+    }
+
+    @Override
+    public Boolean remove(Event entity) {
+        return eventDao.remove(entity);
+    }
+
+    @Override
+    public Boolean remove(Long id) {
+        return eventDao.remove(id);
+    }
+
+    @Override
+    public Long getNextIncrement() {
+        return null;
     }
 }

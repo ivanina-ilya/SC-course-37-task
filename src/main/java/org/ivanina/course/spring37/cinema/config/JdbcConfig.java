@@ -1,15 +1,23 @@
 package org.ivanina.course.spring37.cinema.config;
 
+import org.ivanina.course.spring37.cinema.dao.EventDao;
 import org.ivanina.course.spring37.cinema.dao.UserDao;
+import org.ivanina.course.spring37.cinema.dao.impl.EventDaoImpl;
 import org.ivanina.course.spring37.cinema.dao.impl.UserDaoImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
+import java.sql.SQLException;
 
 @Configuration
 @PropertySource("classpath:jdbc.properties")
@@ -27,6 +35,23 @@ public class JdbcConfig {
     @Value("${spring.datasource.password}")
     private String password;
 
+    @Autowired
+    private DataSource dataSource;
+
+    @PostConstruct
+    public void init() throws SQLException {
+        Resource rc = new ClassPathResource("db/initDB.sql");
+        ScriptUtils.executeSqlScript(dataSource.getConnection(), rc);
+
+        rc = new ClassPathResource("db/initAuditoriumsDB.sql");
+        ScriptUtils.executeSqlScript(dataSource.getConnection(), rc);
+
+        rc = new ClassPathResource("db/initUsersDB.sql");
+        ScriptUtils.executeSqlScript(dataSource.getConnection(), rc);
+
+        rc = new ClassPathResource("db/initEventDB.sql");
+        ScriptUtils.executeSqlScript(dataSource.getConnection(), rc);
+    }
 
     @Bean
     public DataSource dataSource() {
@@ -53,4 +78,8 @@ public class JdbcConfig {
     }
 
 
+    @Bean(name = "eventDao")
+    public EventDao eventDao() {
+        return new EventDaoImpl();
+    }
 }

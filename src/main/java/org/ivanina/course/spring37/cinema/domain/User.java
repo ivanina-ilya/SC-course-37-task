@@ -10,6 +10,7 @@ import org.springframework.lang.NonNull;
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.NavigableSet;
 import java.util.Objects;
@@ -26,7 +27,7 @@ public class User extends DomainObject {
     @NonNull
     private String email;
 
-    private LocalDateTime birthday;
+    private LocalDate birthday;
 
     private NavigableSet<Ticket> tickets = new TreeSet<>();
 
@@ -77,11 +78,11 @@ public class User extends DomainObject {
         this.tickets.add(ticket);
     }
 
-    public LocalDateTime getBirthday() {
+    public LocalDate getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(LocalDateTime birthday) {
+    public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
 
@@ -121,7 +122,7 @@ public class User extends DomainObject {
 
     @Override
     public String toString() {
-        return String.format("%s %s (%s)", firstName, lastName, email);
+        return String.format("%s %s (%s, ID: %d)", firstName, lastName, email, getId());
     }
 
 

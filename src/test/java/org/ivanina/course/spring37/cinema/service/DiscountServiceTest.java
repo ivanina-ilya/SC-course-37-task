@@ -1,6 +1,7 @@
 package org.ivanina.course.spring37.cinema.service;
 
 import org.apache.log4j.Logger;
+import org.ivanina.course.spring37.cinema.config.JdbcConfig;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,12 +14,13 @@ import org.ivanina.course.spring37.cinema.domain.Event;
 import org.ivanina.course.spring37.cinema.domain.EventRating;
 import org.ivanina.course.spring37.cinema.domain.User;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = ApplicationSpringConfig.class) // will be use test config
+@ContextConfiguration(classes = {ApplicationSpringConfig.class, JdbcConfig.class})
 public class DiscountServiceTest {
 
     private Logger log = Logger.getLogger(getClass());
@@ -58,7 +60,7 @@ public class DiscountServiceTest {
         discount = discountService.getDiscount(user,event,dateTime,5);
         assertEquals(0,discount);
 
-        user.setBirthday( dateTime );
+        user.setBirthday( dateTime.toLocalDate() );
         discount = discountService.getDiscount(user,event,dateTime,5);
         assertEquals(5,discount);
 

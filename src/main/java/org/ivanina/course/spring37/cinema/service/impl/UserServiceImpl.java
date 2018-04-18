@@ -2,8 +2,10 @@ package org.ivanina.course.spring37.cinema.service.impl;
 
 import org.apache.log4j.Logger;
 import org.ivanina.course.spring37.cinema.dao.DomainStore;
+import org.ivanina.course.spring37.cinema.dao.UserDao;
 import org.ivanina.course.spring37.cinema.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -16,49 +18,51 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Properties;
+import java.util.Set;
 
 
-public class UserServiceImpl extends DomainStore<User> implements UserService {
+public class UserServiceImpl implements UserService {
 
     private Logger log = Logger.getLogger(getClass());
 
-    @Value("#{defaultUsers}")
-    private Properties properties;
-
     @Autowired
-    DataSource dataSource;
+    @Qualifier("userDao")
+    private UserDao userDao;
 
-    @PostConstruct
-    private void init() throws SQLException {
-        /*Arrays.asList( properties.getProperty("elements.list").split(",") )
-                .forEach( marker -> {
-                    marker = marker.trim();
-                    User user = new User(
-                            properties.getProperty(marker+".firstName"),
-                            properties.getProperty(marker+".lastName"),
-                            properties.getProperty(marker+".email")
-                    );
-                    save(user);
-                } );*/
-        Resource rc = new ClassPathResource("db/initUsersDB.sql");
-        ScriptUtils.executeSqlScript(dataSource.getConnection(), rc);
-    }
 
     @Nullable
     @Override
     public User getUserByEmail(String email) {
-        return getAll().stream()
-                .filter(user -> user.getEmail().equalsIgnoreCase(email))
-                .findFirst().orElse(null);
+        return userDao.getByEmail(email);
     }
 
     @Override
     public Long save(User user) {
-        User validate = getUserByEmail(user.getEmail());
-        if(validate != null && !validate.getId().equals(user.getId()))
-            throw new IllegalArgumentException("Duplicate User by Email ["+user.getEmail()+"]");
-        return super.save(user);
+        return userDao.save(user);
     }
 
+    @Override
+    public Set<User> getAll() {
+        return userDao.getAll();
+    }
 
+    @Override
+    public User get(Long id) {
+        return userDao.get(id);
+    }
+
+    @Override
+    public Boolean remove(User entity) {
+        return userDao.remove(entity);
+    }
+
+    @Override
+    public Boolean remove(Long id) {
+        return userDao.remove(id);
+    }
+
+    @Override
+    public Long getNextIncrement() {
+        return null;
+    }
 }

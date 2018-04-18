@@ -2,8 +2,10 @@ package org.ivanina.course.spring37.cinema.domain;
 
 import org.springframework.lang.NonNull;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Auditorium extends DomainObject {
 
@@ -40,6 +42,22 @@ public class Auditorium extends DomainObject {
 
     public void setVipSeats(Set<Long> vipSeats) {
         this.vipSeats = vipSeats;
+    }
+
+    public String vipSeatsToString(){
+        return vipSeats == null ?
+                "" :
+                vipSeats.stream()
+                        .map(Object::toString)
+                        .collect(Collectors.joining(","));
+    }
+
+    public static Set<Long> vipSeatsParse(String seats){
+        return seats == null || seats.length() == 0 ?
+                null :
+                Arrays.stream(seats.split(","))
+                    .map(Long::parseLong)
+                    .collect(Collectors.toSet());
     }
 
     @Override

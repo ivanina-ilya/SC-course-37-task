@@ -19,6 +19,8 @@ public class Event extends DomainObject {
 
     private Double basePrice;
 
+    private Long durationMilliseconds;
+
     private EventRating rating;
 
     private NavigableMap<LocalDateTime, Auditorium> auditoriums = new TreeMap<>();
@@ -114,6 +116,13 @@ public class Event extends DomainObject {
         this.auditoriums = auditoriums;
     }
 
+    public Long getDurationMilliseconds() {
+        return durationMilliseconds;
+    }
+
+    public void setDurationMilliseconds(Long durationMilliseconds) {
+        this.durationMilliseconds = durationMilliseconds;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -132,6 +141,7 @@ public class Event extends DomainObject {
 
     @Override
     public String toString() {
-        return "Event '" + name + "' with " + rating + " rating; Price: " + basePrice;
+        return String.format("Event '%s' with %s rating; Price: %d (ID: %d)",
+                name, rating.name(), basePrice, getId()) ;
     }
 }

@@ -27,8 +27,8 @@ public class DiscountServiceImpl implements DiscountService {
 
     private byte getDiscountByBirthday(@Nullable User user,LocalDateTime airDateTime){
         if(user.getBirthday() != null &&
-                user.getBirthday().isAfter(airDateTime.minusDays(discountBirthdayInterval)) &&
-                user.getBirthday().isBefore(airDateTime.plusDays(discountBirthdayInterval)) )
+                user.getBirthday().isAfter(airDateTime.toLocalDate().minusDays(discountBirthdayInterval)) &&
+                user.getBirthday().isBefore(airDateTime.toLocalDate().plusDays(discountBirthdayInterval)) )
             return 5;
         return 0;
     }

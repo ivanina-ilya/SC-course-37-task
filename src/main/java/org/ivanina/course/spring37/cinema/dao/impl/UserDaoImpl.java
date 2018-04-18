@@ -3,16 +3,15 @@ package org.ivanina.course.spring37.cinema.dao.impl;
 import org.ivanina.course.spring37.cinema.dao.UserDao;
 import org.ivanina.course.spring37.cinema.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.lang.Nullable;
+import org.springframework.util.CollectionUtils;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,46 +36,69 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User get(Long id) {
-        return jdbcTemplate.queryForObject(
-                "SELECT * FROM "+table+" WHERE id=?",
-                new Object[]{id},
-                new RowMapper<User>() {
-                    @Nullable
-                    @Override
-                    public User mapRow(ResultSet resultSet, int i) throws SQLException {
-                        return UserDaoImpl.mapRow(resultSet);
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT * FROM "+table+" WHERE id=?",
+                    new Object[]{id},
+                    new RowMapper<User>() {
+                        @Nullable
+                        @Override
+                        public User mapRow(ResultSet resultSet, int i) throws SQLException {
+                            return UserDaoImpl.mapRow(resultSet);
+                        }
                     }
-                }
-        );
+            );
+        } catch ( EmptyResultDataAccessException e){
+            return null;
+        }
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT * FROM "+table+" WHERE email=?",
+                    new Object[]{email},
+                    new RowMapper<User>() {
+                        @Nullable
+                        @Override
+                        public User mapRow(ResultSet resultSet, int i) throws SQLException {
+                            return UserDaoImpl.mapRow(resultSet);
+                        }
+                    }
+            );
+        } catch ( EmptyResultDataAccessException e){
+            return null;
+        }
     }
 
     @Override
     public Long save(User entity) {
         int rows = 0;
+        java.sql.Date birthdayDate = entity.getBirthday() != null ?
+                java.sql.Date.valueOf(entity.getBirthday()) : null;
         if(entity.getId() == null){
-            rows = jdbcTemplate.update("INSERT INTO "+table+" (firstName, lastName, email, birthday) VALUES (?,?,?,?)",
+            /*rows = jdbcTemplate.update("INSERT INTO "+table+" (firstName, lastName, email, birthday) VALUES (?,?,?,?)",
                     entity.getFirstName(), entity.getLastName(), entity.getEmail(),
-                    java.sql.Timestamp.valueOf(entity.getBirthday()) );
+                    birthdayDate );*/
 
             GeneratedKeyHolder holder = new GeneratedKeyHolder();
-            jdbcTemplate.update(new PreparedStatementCreator() {
-                @Override
-                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                    PreparedStatement statement = connection.prepareStatement(
-                            "INSERT INTO "+table+" (firstName, lastName, email, birthday) VALUES (?,?,?,?)"
-                    );
-                    statement.setString(1,entity.getFirstName());
-                    statement.setString(2,entity.getLastName());
-                    statement.setString(3,entity.getEmail());
-                    statement.setDate(4,java.sql.Date.valueOf(entity.getBirthday().toLocalDate()));
-                    return statement;
-                }
+            rows = jdbcTemplate.update(connection -> {
+                PreparedStatement statement = connection.prepareStatement(
+                        "INSERT INTO "+table+" (firstName, lastName, email, birthday) VALUES (?,?,?,?)",
+                        Statement.RETURN_GENERATED_KEYS
+                );
+                statement.setString(1,entity.getFirstName());
+                statement.setString(2,entity.getLastName());
+                statement.setString(3,entity.getEmail());
+                statement.setDate(4,birthdayDate);
+                return statement;
             },holder);
             entity.setId( holder.getKey().longValue() );
         } else {
             rows = jdbcTemplate.update("UPDATE "+table+" SET firstName=?, lastName=?,email=?, birthday=? WHERE id=?",
                     entity.getFirstName(), entity.getLastName(), entity.getEmail(),
-                    java.sql.Timestamp.valueOf(entity.getBirthday()),
+                    birthdayDate,
                     entity.getId());
         }
         return rows == 0 ? null : entity.getId();
@@ -86,12 +108,17 @@ public class UserDaoImpl implements UserDao {
     public Boolean remove(User entity) {
         if(entity.getId() == null) throw new IllegalArgumentException(
                 String.format("Does not exist ID for User with email %s", entity.getEmail()) );
-        return remove(entity.getId());
+        if (remove(entity.getId())){
+            entity.setId(null);
+            return true;
+        }else {
+            return false;
+        }
     }
 
     @Override
     public Boolean remove(Long id) {
-        int rows = jdbcTemplate.update("DELETE from ? WHERE id = ? ", table, id);
+        int rows = jdbcTemplate.update("DELETE from "+table+" WHERE id = ? ", id);
         return rows == 0 ? false : true;
     }
 
@@ -110,7 +137,9 @@ public class UserDaoImpl implements UserDao {
         user.setFirstName(resultSet.getString("firstName"));
         user.setLastName(resultSet.getString("lastName"));
         user.setEmail(resultSet.getString("email"));
-        user.setBirthday(resultSet.getTimestamp("birthday").toLocalDateTime());
+        java.sql.Date birthdayDate = resultSet.getDate("birthday");
+        if(birthdayDate != null)
+            user.setBirthday(birthdayDate.toLocalDate());
         user.setId( resultSet.getLong("id") );
         return user;
     }

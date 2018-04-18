@@ -1,14 +1,26 @@
 package org.ivanina.course.spring37.cinema.dao;
 
 import org.ivanina.course.spring37.cinema.domain.DomainObject;
+import org.ivanina.course.spring37.cinema.domain.User;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public abstract class DomainStore<T extends DomainObject> extends SimpleStorage<T> implements Dao<T> {
+
+    private Dao dao;
+    public void setDao(Dao dao){
+        this.dao = dao;
+    }
+    public Dao getDao() {
+        return this.dao;
+    }
+
     @Override
     public Set<T> getAll() {
-        return new HashSet<T>(store.values());
+        // return new HashSet<T>(store.values());
+        return dao.getAll();
     }
 
     @Override
