@@ -1,24 +1,36 @@
 package org.ivanina.course.spring37.cinema.service.impl;
 
+import org.apache.log4j.Logger;
 import org.ivanina.course.spring37.cinema.dao.DomainStore;
 import org.ivanina.course.spring37.cinema.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.lang.Nullable;
 import org.ivanina.course.spring37.cinema.domain.User;
 
 import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Properties;
 
 
 public class UserServiceImpl extends DomainStore<User> implements UserService {
 
+    private Logger log = Logger.getLogger(getClass());
+
     @Value("#{defaultUsers}")
     private Properties properties;
 
+    @Autowired
+    DataSource dataSource;
+
     @PostConstruct
-    private void init() {
-        Arrays.asList( properties.getProperty("elements.list").split(",") )
+    private void init() throws SQLException {
+        /*Arrays.asList( properties.getProperty("elements.list").split(",") )
                 .forEach( marker -> {
                     marker = marker.trim();
                     User user = new User(
@@ -27,7 +39,9 @@ public class UserServiceImpl extends DomainStore<User> implements UserService {
                             properties.getProperty(marker+".email")
                     );
                     save(user);
-                } );
+                } );*/
+        Resource rc = new ClassPathResource("db/initUsersDB.sql");
+        ScriptUtils.executeSqlScript(dataSource.getConnection(), rc);
     }
 
     @Nullable
@@ -45,5 +59,6 @@ public class UserServiceImpl extends DomainStore<User> implements UserService {
             throw new IllegalArgumentException("Duplicate User by Email ["+user.getEmail()+"]");
         return super.save(user);
     }
+
 
 }

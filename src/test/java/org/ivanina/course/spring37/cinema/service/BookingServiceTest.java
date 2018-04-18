@@ -1,6 +1,6 @@
 package org.ivanina.course.spring37.cinema.service;
 
-import org.ivanina.course.spring37.cinema.ApplicationSpringConfig;
+import org.ivanina.course.spring37.cinema.config.ApplicationSpringConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

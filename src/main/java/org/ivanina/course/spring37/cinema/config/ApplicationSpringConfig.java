@@ -1,20 +1,22 @@
-package org.ivanina.course.spring37.cinema;
+package org.ivanina.course.spring37.cinema.config;
 
 import org.apache.log4j.Logger;
 import org.ivanina.course.spring37.cinema.service.*;
 import org.ivanina.course.spring37.cinema.service.impl.*;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
+import org.springframework.boot.autoconfigure.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.io.ClassPathResource;
-import ua.epam.course.spring37.cinema.service.*;
-import ua.epam.course.spring37.cinema.service.impl.*;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+
+import javax.sql.DataSource;
 
 
 @Configuration
-@ComponentScan({"ua.epam.course.spring37.cinema.aspects","ua.epam.course.spring37.cinema.shell"})
+@ComponentScan({"org.ivanina.course.spring37.cinema.aspects","org.ivanina.course.spring37.cinema.shell"})
 @EnableAspectJAutoProxy
 public class ApplicationSpringConfig {
     @Bean(name = "auditoriumProps")
@@ -66,6 +68,7 @@ public class ApplicationSpringConfig {
     public BookingService BookingService(){
         return new BookingServiceImpl();
     }
+
 
 
 }

@@ -1,7 +1,7 @@
 package org.ivanina.course.spring37.cinema.service;
 
 import org.apache.log4j.Logger;
-import org.ivanina.course.spring37.cinema.ApplicationSpringConfig;
+import org.ivanina.course.spring37.cinema.config.ApplicationSpringConfig;
 import org.ivanina.course.spring37.cinema.aspects.CounterAspect;
 import org.ivanina.course.spring37.cinema.domain.Event;
 import org.junit.After;

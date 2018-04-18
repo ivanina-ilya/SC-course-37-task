@@ -7,6 +7,6 @@
        http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
     <context:annotation-config />
-    <bean name="ApplicationSpringConfig" class="org.ivanina.course.spring37.cinema.ApplicationSpringConfig" />
+    <bean name="ApplicationSpringConfig" class="org.ivanina.course.spring37.cinema.config.ApplicationSpringConfig" />
 
 </beans>

@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.ivanina.course.spring37.cinema.ApplicationSpringConfig;
+import org.ivanina.course.spring37.cinema.config.ApplicationSpringConfig;
 import org.ivanina.course.spring37.cinema.domain.User;
 
 

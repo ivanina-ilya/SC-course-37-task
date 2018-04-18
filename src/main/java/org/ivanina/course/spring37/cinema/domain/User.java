@@ -1,13 +1,22 @@
 package org.ivanina.course.spring37.cinema.domain;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.lang.NonNull;
 
+import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.NavigableSet;
 import java.util.Objects;
 import java.util.TreeSet;
 
 public class User extends DomainObject {
+
 
     @NonNull
     private String firstName;
@@ -76,6 +85,7 @@ public class User extends DomainObject {
         this.birthday = birthday;
     }
 
+
     @Override
     public int hashCode() {
         return Objects.hash(firstName, lastName, email);
@@ -113,6 +123,7 @@ public class User extends DomainObject {
     public String toString() {
         return String.format("%s %s (%s)", firstName, lastName, email);
     }
+
 
 
 }

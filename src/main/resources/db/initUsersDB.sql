@@ -1,0 +1,16 @@
+DROP TABLE IF EXISTS USERS;
+
+CREATE TABLE USERS
+(
+  id BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+  firstName VARCHAR(64) NOT NULL,
+  lastName VARCHAR(64),
+  birthday DATETIME,
+  email VARCHAR(64) NOT NULL
+);
+CREATE UNIQUE INDEX users_email_uindex ON users (email);
+
+INSERT INTO PUBLIC.USERS (FIRSTNAME, LASTNAME, BIRTHDAY, EMAIL)
+VALUES ('John', 'Smith', '1978-04-17 23:39:18.637000000', 'j.smith@test.com'),
+  ('Petr', 'Mach', '1994-04-20 10:39:18.637000000', 'Petr.Mach@test.com');
+
