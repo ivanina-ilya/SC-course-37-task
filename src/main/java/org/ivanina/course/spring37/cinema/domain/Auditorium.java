@@ -19,6 +19,12 @@ public class Auditorium extends DomainObject {
     public Auditorium(String name) {
         this.name = name;
     }
+    public Auditorium(Long id, String name, Long numberOfSeats, Set<Long> vipSeats) {
+        this.setId(id);
+        this.name = name;
+        this.numberOfSeats = numberOfSeats;
+        this.vipSeats = vipSeats;
+    }
 
     public String getName() {
         return name;

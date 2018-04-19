@@ -2,6 +2,7 @@ package org.ivanina.course.spring37.cinema.dao.impl;
 
 import org.ivanina.course.spring37.cinema.dao.UserDao;
 import org.ivanina.course.spring37.cinema.domain.User;
+import org.ivanina.course.spring37.cinema.service.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -78,9 +79,6 @@ public class UserDaoImpl implements UserDao {
         java.sql.Date birthdayDate = entity.getBirthday() != null ?
                 java.sql.Date.valueOf(entity.getBirthday()) : null;
         if(entity.getId() == null){
-            /*rows = jdbcTemplate.update("INSERT INTO "+table+" (firstName, lastName, email, birthday) VALUES (?,?,?,?)",
-                    entity.getFirstName(), entity.getLastName(), entity.getEmail(),
-                    birthdayDate );*/
 
             GeneratedKeyHolder holder = new GeneratedKeyHolder();
             rows = jdbcTemplate.update(connection -> {
@@ -88,10 +86,10 @@ public class UserDaoImpl implements UserDao {
                         "INSERT INTO "+table+" (firstName, lastName, email, birthday) VALUES (?,?,?,?)",
                         Statement.RETURN_GENERATED_KEYS
                 );
-                statement.setString(1,entity.getFirstName());
-                statement.setString(2,entity.getLastName());
-                statement.setString(3,entity.getEmail());
-                statement.setDate(4,birthdayDate);
+                Util.statementSetStringOrNull(statement, 1,entity.getFirstName());
+                Util.statementSetStringOrNull(statement, 2,entity.getLastName());
+                Util.statementSetStringOrNull(statement, 3,entity.getEmail());
+                Util.statementSetDateOrNull(statement, 4,birthdayDate);
                 return statement;
             },holder);
             entity.setId( holder.getKey().longValue() );

@@ -1,8 +1,12 @@
 package org.ivanina.course.spring37.cinema.config;
 
+import org.ivanina.course.spring37.cinema.dao.AuditoriumDao;
 import org.ivanina.course.spring37.cinema.dao.EventDao;
+import org.ivanina.course.spring37.cinema.dao.TicketDao;
 import org.ivanina.course.spring37.cinema.dao.UserDao;
+import org.ivanina.course.spring37.cinema.dao.impl.AuditoriumDaoImpl;
 import org.ivanina.course.spring37.cinema.dao.impl.EventDaoImpl;
+import org.ivanina.course.spring37.cinema.dao.impl.TicketDaoImpl;
 import org.ivanina.course.spring37.cinema.dao.impl.UserDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -81,5 +85,15 @@ public class JdbcConfig {
     @Bean(name = "eventDao")
     public EventDao eventDao() {
         return new EventDaoImpl();
+    }
+
+    @Bean(name = "auditoriumDao")
+    public AuditoriumDao auditoriumDao() {
+        return new AuditoriumDaoImpl();
+    }
+
+    @Bean(name = "ticketDao")
+    public TicketDao ticketDao() {
+        return new TicketDaoImpl();
     }
 }

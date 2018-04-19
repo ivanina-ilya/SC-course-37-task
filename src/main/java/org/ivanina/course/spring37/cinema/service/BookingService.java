@@ -19,7 +19,9 @@ public interface BookingService {
 
     void bookTickets(@Nullable User user, @NonNull Event event, @NonNull LocalDateTime dateTime, @NonNull Long seat);
 
-    @NonNull Set<Ticket> getPurchasedTicketsForEvent(@NonNull Event event, @NonNull LocalDateTime dateTime);
+    Set<Ticket> getPurchasedTicketsForEvent(@NonNull Event event, @NonNull LocalDateTime dateTime);
+
+    Set<Ticket> getPurchasedTicketsForUser(@NonNull Event event, @NonNull LocalDateTime dateTime, @NonNull User user);
 
     Boolean purchaseValidate(Ticket ticket);
 }

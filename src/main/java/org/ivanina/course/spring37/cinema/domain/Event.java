@@ -62,7 +62,8 @@ public class Event extends DomainObject {
     }
 
     public boolean airsOnDateTime(LocalDateTime dateTime) {
-        return airDates.stream().anyMatch(dt -> dt.equals(dateTime));
+        return airDates.stream().anyMatch(
+                dt -> dateTime.isAfter(dt) && dateTime.isBefore(dt.plusSeconds( durationMilliseconds/1000 ))  );
     }
 
     public boolean airsOnDate(LocalDate date) {
@@ -114,6 +115,8 @@ public class Event extends DomainObject {
 
     public void setAuditoriums(NavigableMap<LocalDateTime, Auditorium> auditoriums) {
         this.auditoriums = auditoriums;
+        if(this.airDates == null) this.airDates = new TreeSet<>();
+        this.airDates.addAll( auditoriums.keySet() );
     }
 
     public Long getDurationMilliseconds() {

@@ -14,7 +14,6 @@ import org.ivanina.course.spring37.cinema.domain.Event;
 import org.ivanina.course.spring37.cinema.domain.EventRating;
 import org.ivanina.course.spring37.cinema.domain.User;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.junit.Assert.assertEquals;
@@ -37,10 +36,6 @@ public class DiscountServiceTest {
     @Autowired
     private AuditoriumService auditoriumService;
 
-
-    /*public void setAuditoriumService(AuditoriumService auditoriumService) {
-        this.auditoriumService = auditoriumService;
-    }*/
 
     @After
     public void  afterEach(){

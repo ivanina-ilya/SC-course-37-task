@@ -1,5 +1,7 @@
 package org.ivanina.course.spring37.cinema.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Set;
 
 
@@ -10,4 +12,5 @@ public interface Dao<T> {
     Boolean remove(T entity);
     Boolean remove(Long id);
     Long getNextIncrement();
+
 }

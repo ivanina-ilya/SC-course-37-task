@@ -1,43 +1,58 @@
 package org.ivanina.course.spring37.cinema.service.impl;
 
+import org.ivanina.course.spring37.cinema.dao.AuditoriumDao;
 import org.ivanina.course.spring37.cinema.dao.DomainStore;
+import org.ivanina.course.spring37.cinema.service.EventService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
 import org.ivanina.course.spring37.cinema.domain.Auditorium;
 import org.ivanina.course.spring37.cinema.service.AuditoriumService;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class AuditoriumServiceImpl extends DomainStore<Auditorium> implements AuditoriumService {
+public class AuditoriumServiceImpl implements AuditoriumService {
 
-    @Value("#{auditoriumProps}")
-    private Properties properties;
+    @Autowired
+    @Qualifier("auditoriumDao")
+    private AuditoriumDao auditoriumDao;
 
     @Nullable
     @Override
     public Auditorium getByName(String name) {
-        return getAll().stream().filter(auditorium -> auditorium.getName().equals(name)).findFirst().orElse(null);
+        return auditoriumDao.getByName(name);
     }
 
-    @PostConstruct
-    private void init() {
-        Arrays.asList(properties.getProperty("elements.list").split(","))
-                .forEach(marker -> {
-                    marker = marker.trim();
-                    Auditorium auditorium = new Auditorium(properties.getProperty(marker + ".name"));
-                    auditorium.setNumberOfSeats(Long.parseLong(properties.getProperty(marker + ".numberOfSeats")));
-                    List<Long> vipSeats = Arrays.asList(properties.getProperty(marker + ".vipSeats").split(","))
-                            .stream()
-                            .map(item -> item.trim())
-                            .map(Long::parseLong)
-                            .collect(Collectors.toList());
-                    auditorium.setVipSeats(new HashSet<>(vipSeats));
-                    save(auditorium);
-                });
+    @Override
+    public Set<Auditorium> getAll() {
+        return auditoriumDao.getAll();
+    }
+
+    @Override
+    public Auditorium get(Long id) {
+        return auditoriumDao.get(id);
+    }
+
+    @Override
+    public Long save(Auditorium entity) {
+        return auditoriumDao.save(entity);
+    }
+
+    @Override
+    public Boolean remove(Auditorium entity) {
+        return auditoriumDao.remove(entity);
+    }
+
+    @Override
+    public Boolean remove(Long id) {
+        return auditoriumDao.remove(id);
+    }
+
+    @Override
+    public Long getNextIncrement() {
+        return null;
     }
 }

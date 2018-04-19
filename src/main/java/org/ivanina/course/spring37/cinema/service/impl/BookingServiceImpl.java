@@ -1,6 +1,7 @@
 package org.ivanina.course.spring37.cinema.service.impl;
 
 import org.ivanina.course.spring37.cinema.dao.DomainStore;
+import org.ivanina.course.spring37.cinema.dao.TicketDao;
 import org.ivanina.course.spring37.cinema.domain.Ticket;
 import org.ivanina.course.spring37.cinema.service.DiscountService;
 import org.ivanina.course.spring37.cinema.service.UserService;
@@ -18,7 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class BookingServiceImpl extends DomainStore<Ticket> implements BookingService {
+public class BookingServiceImpl implements BookingService {
 
     @Autowired
     @Qualifier("userService")
@@ -31,6 +32,10 @@ public class BookingServiceImpl extends DomainStore<Ticket> implements BookingSe
     @Autowired
     @Qualifier("eventsService")
     private EventService eventService;
+
+    @Autowired
+    @Qualifier("ticketDao")
+    private TicketDao ticketDao;
 
 
     @Override
@@ -57,15 +62,16 @@ public class BookingServiceImpl extends DomainStore<Ticket> implements BookingSe
     }
 
     public Set<Ticket> getTicketsByUser(User user) {
-        return getAll().stream()
+        return null;
+        /*return getAll().stream()
                 .filter(ticket -> ticket.getUser() != null && ticket.getUser().getEmail().equalsIgnoreCase( user.getEmail() ))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toSet());*/
     }
 
     @Override
     public void bookTickets(Set<Ticket> tickets) {
-        tickets.forEach(this::purchaseValidate);
-        tickets.forEach(this::save);
+        /*tickets.forEach(this::purchaseValidate);
+        tickets.forEach(this::save);*/
     }
 
     @Override
@@ -75,7 +81,7 @@ public class BookingServiceImpl extends DomainStore<Ticket> implements BookingSe
 
     @Override
     public Boolean purchaseValidate(Ticket ticket) {
-        Event event = eventService.get( ticket.getEvent().getId());
+        /*Event event = eventService.get( ticket.getEvent().getId());
         if(event == null)
             throw new IllegalArgumentException("The event not available ["+ticket.getEvent()+"]");
         if (eventService.getAvailableEventDate(event).stream()
@@ -91,10 +97,13 @@ public class BookingServiceImpl extends DomainStore<Ticket> implements BookingSe
                 .filter( storeTicket -> storeTicket.getDateTime().isEqual(ticket.getDateTime()))
                 .anyMatch( storeTicket -> storeTicket.getSeat().equals(ticket.getSeat()) ) )
             throw new IllegalArgumentException("The seat ["+ticket.getSeat()+"] for event not available ["+ticket.getEvent()+"]");
-
+*/
         return true;
     }
 
 
-
+    @Override
+    public Set<Ticket> getPurchasedTicketsForUser(Event event, LocalDateTime dateTime, User user) {
+        return null;
+    }
 }

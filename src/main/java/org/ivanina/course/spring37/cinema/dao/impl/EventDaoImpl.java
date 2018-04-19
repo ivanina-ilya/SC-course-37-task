@@ -1,10 +1,14 @@
 package org.ivanina.course.spring37.cinema.dao.impl;
 
+import org.ivanina.course.spring37.cinema.dao.AuditoriumDao;
 import org.ivanina.course.spring37.cinema.dao.EventDao;
+import org.ivanina.course.spring37.cinema.domain.Auditorium;
 import org.ivanina.course.spring37.cinema.domain.Event;
 import org.ivanina.course.spring37.cinema.domain.EventRating;
 import org.ivanina.course.spring37.cinema.domain.User;
+import org.ivanina.course.spring37.cinema.service.Util;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -15,8 +19,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashSet;
-import java.util.Set;
+import java.text.DateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class EventDaoImpl implements EventDao {
 
@@ -24,6 +33,10 @@ public class EventDaoImpl implements EventDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    @Qualifier("auditoriumDao")
+    private AuditoriumDao auditoriumDao;
 
     @Override
     public Event getByName(String name) {
@@ -59,7 +72,7 @@ public class EventDaoImpl implements EventDao {
     @Override
     public Event get(Long id) {
         try {
-            return jdbcTemplate.queryForObject(
+            Event event =  jdbcTemplate.queryForObject(
                     "SELECT * FROM "+table+" WHERE id=?",
                     new Object[]{id},
                     new RowMapper<Event>() {
@@ -70,6 +83,8 @@ public class EventDaoImpl implements EventDao {
                         }
                     }
             );
+            event.setAuditoriums( getEventAuditoriums( event.getId() ) );
+            return event;
         } catch ( EmptyResultDataAccessException e){
             return null;
         }
@@ -87,9 +102,9 @@ public class EventDaoImpl implements EventDao {
                         Statement.RETURN_GENERATED_KEYS
                 );
                 statement.setString(1,entity.getName());
-                statement.setString(2,entity.getRating() != null ? entity.getRating().name() : null);
-                statement.setDouble(3,entity.getBasePrice());
-                statement.setLong(4,entity.getDurationMilliseconds());
+                Util.statementSetStringOrNull(statement,2,entity.getRating() != null ? entity.getRating().name() : null);
+                Util.statementSetDoubleOrNull(statement,3,entity.getBasePrice());
+                Util.statementSetLongOrNull(statement, 4,entity.getDurationMilliseconds());
                 return statement;
             },holder);
             entity.setId( holder.getKey().longValue() );
@@ -101,6 +116,10 @@ public class EventDaoImpl implements EventDao {
                     entity.getBasePrice(),
                     entity.getDurationMilliseconds(),
                     entity.getId());
+        }
+        removeEventAuditoriums( entity.getId() );
+        if(entity.getAuditoriums() != null){
+            addEventAuditoriums( entity.getId(), entity.getAuditoriums() );
         }
         return rows == 0 ? null : entity.getId();
     }
@@ -122,6 +141,48 @@ public class EventDaoImpl implements EventDao {
         int rows = jdbcTemplate.update("DELETE from "+table+" WHERE id = ? ", id);
         return rows == 0 ? false : true;
     }
+
+    @Override
+    public NavigableMap<LocalDateTime, Auditorium> getEventAuditoriums(Long eventId){
+        try {
+            return new TreeMap<>(jdbcTemplate.queryForList(
+                    "SELECT * FROM EventToAuditorium e " +
+                            "RIGHT  JOIN Auditoriums AS a ON a.id = e.auditorium_id " +
+                            "WHERE event_id=?",
+                    new Object[]{eventId}).stream()
+                    .collect(Collectors.toMap(
+                            row -> Util.localDateTimeParse( ((Map)row).get("airDate").toString() ),
+                            row -> new Auditorium(
+                                    Long.parseLong( ((Map)row).get("id").toString()),
+                                    ((Map)row).get("name").toString(),
+                                    Long.parseLong( ((Map)row).get("numberOfSeats") != null ?
+                                            ((Map)row).get("numberOfSeats").toString() :
+                                            null
+                                    ),
+                                    Auditorium.vipSeatsParse( ((Map)row).get("vipSeats") != null ?
+                                            ((Map)row).get("vipSeats").toString() :
+                                            null
+                                    )
+                            )
+                    )));
+
+        } catch ( EmptyResultDataAccessException e){
+            return null;
+        }
+    }
+
+    public int removeEventAuditoriums(Long eventId){
+        return jdbcTemplate.update("DELETE from EventToAuditorium WHERE event_id = ? ", eventId);
+    }
+
+
+    public void addEventAuditoriums(Long eventId, NavigableMap<LocalDateTime, Auditorium> auditoriums){
+        auditoriums.entrySet().stream()
+                .forEach(entry -> jdbcTemplate.update(
+                        "INSERT INTO EventToAuditorium (EVENT_ID, AUDITORIUM_ID, AIRDATE) VALUES (?,?,?)",
+                        new Object[]{eventId, entry.getValue().getId(), entry.getKey()} ) );
+    }
+
 
     @Override
     public Long getNextIncrement() {

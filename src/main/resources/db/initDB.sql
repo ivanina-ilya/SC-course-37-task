@@ -52,7 +52,6 @@ CREATE TABLE Tickets
   id BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL,
   user_id BIGINT,
   event_id BIGINT NOT NULL,
-  auditorium_id BIGINT NOT NULL,
   dateTime DATETIME NOT NULL,
   seat INT,
   price DOUBLE

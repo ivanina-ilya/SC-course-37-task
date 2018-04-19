@@ -5,6 +5,7 @@ import org.springframework.lang.NonNull;
 import java.time.LocalDateTime;
 
 public class Ticket extends DomainObject implements Comparable<Ticket> {
+
     private User user;
 
     @NonNull
@@ -12,6 +13,7 @@ public class Ticket extends DomainObject implements Comparable<Ticket> {
 
     @NonNull
     private LocalDateTime dateTime;
+
 
     private Long seat;
 
@@ -22,6 +24,15 @@ public class Ticket extends DomainObject implements Comparable<Ticket> {
         this.event = event;
         this.dateTime = dateTime;
         this.seat = seat;
+    }
+
+    public Ticket(Long id, User user, Event event, LocalDateTime dateTime, Long seat, Double price) {
+        this.setId(id);
+        this.user = user;
+        this.event = event;
+        this.dateTime = dateTime;
+        this.seat = seat;
+        this.price = price;
     }
 
     public User getUser() {
