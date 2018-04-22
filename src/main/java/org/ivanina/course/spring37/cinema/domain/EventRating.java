@@ -1,15 +1,17 @@
 package org.ivanina.course.spring37.cinema.domain;
 
-public enum EventRating {
-    LOW(0.9),
-    MID(1.0),
-    HIGH(1.2);
+import java.math.BigDecimal;
 
-    private final double coefficient;
-    EventRating(double coefficient){
+public enum EventRating {
+    LOW(new BigDecimal(0.9)),
+    MID(new BigDecimal(1.0)),
+    HIGH(new BigDecimal(1.2));
+
+    private final BigDecimal coefficient;
+    EventRating(BigDecimal coefficient){
         this.coefficient = coefficient;
     }
-    public double getCoefficient(){
+    public BigDecimal getCoefficient(){
         return coefficient;
     }
 

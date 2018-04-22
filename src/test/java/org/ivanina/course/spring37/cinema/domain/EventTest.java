@@ -3,6 +3,7 @@ package org.ivanina.course.spring37.cinema.domain;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -22,7 +23,7 @@ public class EventTest {
         auditorium.setVipSeats( new HashSet<>( Arrays.asList(50L,51L,52L,53L,54L,55L)) );
 
         event = new Event(name);
-        event.setBasePrice(99.99);
+        event.setBasePrice( new BigDecimal( 99.99));
         event.setRating( EventRating.HIGH );
         event.addAirDateTime(LocalDateTime.parse("2018-01-01T10:00:00"),auditorium);
         event.addAirDateTime(LocalDateTime.parse("2018-01-01T12:00:00"),auditorium);

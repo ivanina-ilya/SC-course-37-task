@@ -54,7 +54,7 @@ public class ApplicationSpringConfig {
         return new AuditoriumServiceImpl();
     }
 
-    @Bean(name = "eventsService")
+    @Bean(name = "eventService")
     public EventService eventService(){
         return new EventServiceImpl();
     }

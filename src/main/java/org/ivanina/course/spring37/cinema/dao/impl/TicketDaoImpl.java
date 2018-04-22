@@ -14,6 +14,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.lang.Nullable;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -44,24 +45,64 @@ public class TicketDaoImpl implements TicketDao {
                     jdbcTemplate.queryForList(
                     "SELECT * FROM  "+table+" WHERE user_id=?",
                     new Object[]{userId}).stream()
-                            .map( row -> new Ticket(
-                                    Long.parseLong( ((Map)row).get("id").toString()),
-                                    ((Map)row).get("user_id") != null ?
-                                            userDao.get( Long.parseLong( ((Map)row).get("user_id").toString())) :
-                                            null,
-                                    eventDao.get( Long.parseLong( ((Map)row).get("event_id").toString()) ),
-                                    ((Map)row).get("dateTime") != null ?
-                                            Util.localDateTimeParse( ((Map)row).get("dateTime").toString() ) :
-                                            null,
-                                    ((Map)row).get("seat") != null ?
-                                            Long.parseLong( ((Map)row).get("seat").toString() ) :
-                                            null,
-                                    ((Map)row).get("price") != null ?
-                                            Double.parseDouble( ((Map)row).get("price").toString() ) :
-                                            null)
-                            )
+                            .map( row -> getTicket((Map)row) )
                     .collect(Collectors.toSet()
                     ));
+        } catch ( EmptyResultDataAccessException e){
+            return null;
+        }
+    }
+
+    @Override
+    public NavigableSet<Ticket> getTicketsByEvent(Long eventId, LocalDateTime dateTime) {
+        try {
+            return new TreeSet<Ticket>(
+                    jdbcTemplate.queryForList(
+                            "SELECT * FROM  "+table+" WHERE EVENT_ID=? AND DATETIME=?",
+                            new Object[]{
+                                    eventId,
+                                    dateTime.withNano(0)
+                            }).stream()
+                            .map( row -> getTicket((Map)row) )
+                            .collect(Collectors.toSet()
+                            ));
+        } catch ( EmptyResultDataAccessException e){
+            return null;
+        }
+    }
+
+    @Override
+    public NavigableSet<Ticket> getTicketsByUserForEvent(Long userId, Long eventId) {
+        try {
+            return new TreeSet<Ticket>(
+                    jdbcTemplate.queryForList(
+                            "SELECT * FROM  "+table+" WHERE USER_ID=? AND EVENT_ID=?",
+                            new Object[]{
+                                    userId,
+                                    eventId
+                            }).stream()
+                            .map( row -> getTicket((Map)row) )
+                            .collect(Collectors.toSet()
+                            ));
+        } catch ( EmptyResultDataAccessException e){
+            return null;
+        }
+    }
+
+    @Override
+    public NavigableSet<Ticket> getTicketsByUserForEvent(Long userId, Long eventId, LocalDateTime dateTime) {
+        try {
+            return new TreeSet<Ticket>(
+                    jdbcTemplate.queryForList(
+                            "SELECT * FROM  "+table+" WHERE USER_ID=? AND EVENT_ID=? AND DATETIME=?",
+                            new Object[]{
+                                    userId,
+                                    eventId,
+                                    dateTime
+                            }).stream()
+                            .map( row -> getTicket((Map)row) )
+                            .collect(Collectors.toSet()
+                            ));
         } catch ( EmptyResultDataAccessException e){
             return null;
         }
@@ -117,7 +158,7 @@ public class TicketDaoImpl implements TicketDao {
                 Util.statementSetLongOrNull(statement, 2,entity.getEvent().getId());
                 Util.statementSetDateTimeOrNull(statement, 3,entity.getDateTime());
                 Util.statementSetLongOrNull(statement, 4,entity.getSeat());
-                Util.statementSetDoubleOrNull(statement, 5,entity.getPrice());
+                Util.statementSetBigDecimalOrNull(statement, 5,entity.getPrice());
                 return statement;
             },holder);
             entity.setId( holder.getKey().longValue() );
@@ -170,7 +211,21 @@ public class TicketDaoImpl implements TicketDao {
                 event,
                 Util.localDateTimeParse( resultSet.getString("dateTime") ),
                 resultSet.getLong("seat"),
-                resultSet.getDouble("price")
+                resultSet.getBigDecimal("price")
+        );
+    }
+
+    private Ticket getTicket(Map row) {
+        if(row == null ) return null;
+        User user = userDao.get( Long.parseLong( row.get("user_id").toString() ) );
+        Event event = eventDao.get( Long.parseLong( row.get("event_id").toString() ) );
+        return new Ticket(
+                Long.parseLong( row.get("id").toString() ),
+                user,
+                event,
+                Util.localDateTimeParse( row.get("dateTime").toString() ),
+                row.get("seat") != null ? Long.parseLong(row.get("seat").toString()) : null,
+                row.get("price") != null ? new BigDecimal( row.get("price").toString() ) : null
         );
     }
 

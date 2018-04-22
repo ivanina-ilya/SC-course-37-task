@@ -14,6 +14,7 @@ import org.ivanina.course.spring37.cinema.domain.Event;
 import org.ivanina.course.spring37.cinema.domain.EventRating;
 import org.ivanina.course.spring37.cinema.domain.User;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import static org.junit.Assert.assertEquals;
@@ -47,7 +48,7 @@ public class DiscountServiceTest {
         LocalDateTime dateTime = LocalDateTime.parse("2018-04-04T15:00:00");
         User user = new User("John","test", "test@test.com");
         Event event = new Event("Test Event");
-        event.setBasePrice(100.0);
+        event.setBasePrice( new BigDecimal(100.0 ));
         event.setRating(EventRating.HIGH);
         event.addAirDateTime(dateTime, auditoriumService.getByName("Gold"));
 

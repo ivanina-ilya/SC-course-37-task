@@ -1,12 +1,12 @@
 
 ### List  for Booking (by shell interface)
 
-- [ ] get list of events
-- [ ] chose one event, get detailed
-- [ ] get list of users
-- [ ] buy ticket for event by one chosen user email
+- [x] get list of events
+- [x] chose one event, get detailed
+- [x] get list of users
+- [x] buy ticket for event by one chosen user email
   - [ ] check for only feature events
-  - [ ] calculate discount
+  - [x] calculate discount (build in purchase a ticket)
 
 ### Messing
 - [ ] LuckyWinner functional
@@ -19,18 +19,19 @@
   - [ ] discount queried
   - [ ] booked tickets
   - [ ] LuckyWinner count
+- [ ] create separate tests
 - [ ] store counts to DB
 
 ### Entities handling (by shell interface)
 
-- [ ] adding Event / get list / get by (name | id)
-- [ ] adding User / get list / get by (email | id)
-- [ ] adding Auditorium / get list / get by (name | id)
-- [ ] assign Auditorium to Event (with dateTime)
+- [x] adding Event / get list / get by (--- | id)
+- [x] adding User / get list / get by (email | id)
+- [x] adding Auditorium / get list / get by (name | id)
+- [x] assign Auditorium to Event (with dateTime)
 
 
 #### TODOs by services
 
 - [x] Auditorium service impl
-- [ ] Booking service impl
+- [x] Booking service impl
  

@@ -69,6 +69,8 @@ public class EventDaoImpl implements EventDao {
                 }) );
     }
 
+
+
     @Override
     public Event get(Long id) {
         try {
@@ -103,7 +105,7 @@ public class EventDaoImpl implements EventDao {
                 );
                 statement.setString(1,entity.getName());
                 Util.statementSetStringOrNull(statement,2,entity.getRating() != null ? entity.getRating().name() : null);
-                Util.statementSetDoubleOrNull(statement,3,entity.getBasePrice());
+                Util.statementSetBigDecimalOrNull(statement,3,entity.getBasePrice());
                 Util.statementSetLongOrNull(statement, 4,entity.getDurationMilliseconds());
                 return statement;
             },holder);
@@ -202,7 +204,7 @@ public class EventDaoImpl implements EventDao {
         String eventRating = resultSet.getString("eventRating");
         event.setRating( eventRating == null ? null : EventRating.valueOf( eventRating ) );
         event.setDurationMilliseconds( resultSet.getLong("durationMilliseconds") );
-        event.setBasePrice( resultSet.getDouble("basePrice"));
+        event.setBasePrice( resultSet.getBigDecimal("basePrice"));
 
         return event;
     }

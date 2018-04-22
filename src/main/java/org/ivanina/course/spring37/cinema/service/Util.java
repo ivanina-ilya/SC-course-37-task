@@ -1,5 +1,6 @@
 package org.ivanina.course.spring37.cinema.service;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -35,6 +36,14 @@ public class Util {
         }
     }
 
+    public static void statementSetBigDecimalOrNull(PreparedStatement statement, int column, BigDecimal val) throws SQLException {
+        if(val == null){
+            statement.setNull(column, Types.DOUBLE);
+        } else {
+            statement.setBigDecimal(column,val);
+        }
+    }
+
     public static void statementSetDateOrNull(PreparedStatement statement, int column, Date val) throws SQLException {
         if(val == null){
             statement.setNull(column, Types.DATE);
@@ -59,6 +68,27 @@ public class Util {
                 .appendFraction(ChronoField.MICRO_OF_SECOND, 1 ,6, false)
                 .optionalEnd()
                 .toFormatter();
-        return LocalDateTime.parse( dateTimeString, formatter );
+        return LocalDateTime.parse( dateTimeString, formatter ).withNano(0);
+    }
+
+    public static String localDateTimeFormatterDayTime(LocalDateTime dateTime){
+        return Util.localDateTimeFormatter(dateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+
+    public static String localDateTimeFormatterDay(LocalDateTime dateTime){
+        return Util.localDateTimeFormatter(dateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    public static String localDateTimeFormatterTime(LocalDateTime dateTime){
+        return Util.localDateTimeFormatter(dateTime, DateTimeFormatter.ofPattern("HH:mm:ss"));
+    }
+
+    public static String localDateTimeFormatter(LocalDateTime dateTime, DateTimeFormatter formatter){
+        return dateTime.format(formatter);
+    }
+
+
+    public static String shellOutputFormat(String body){
+        return "\n" + body + "\n\n";
     }
 }

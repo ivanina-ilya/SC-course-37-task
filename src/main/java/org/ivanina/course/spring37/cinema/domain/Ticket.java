@@ -1,7 +1,9 @@
 package org.ivanina.course.spring37.cinema.domain;
 
+import org.ivanina.course.spring37.cinema.service.Util;
 import org.springframework.lang.NonNull;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class Ticket extends DomainObject implements Comparable<Ticket> {
@@ -17,7 +19,7 @@ public class Ticket extends DomainObject implements Comparable<Ticket> {
 
     private Long seat;
 
-    private Double price;
+    private BigDecimal price;
 
     public Ticket(User user, Event event, LocalDateTime dateTime, Long seat) {
         this.user = user;
@@ -26,7 +28,7 @@ public class Ticket extends DomainObject implements Comparable<Ticket> {
         this.seat = seat;
     }
 
-    public Ticket(Long id, User user, Event event, LocalDateTime dateTime, Long seat, Double price) {
+    public Ticket(Long id, User user, Event event, LocalDateTime dateTime, Long seat, BigDecimal price) {
         this.setId(id);
         this.user = user;
         this.event = event;
@@ -52,11 +54,11 @@ public class Ticket extends DomainObject implements Comparable<Ticket> {
     }
 
     public LocalDateTime getDateTime() {
-        return dateTime;
+        return dateTime.withNano(0);
     }
 
     public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+        this.dateTime = dateTime.withNano(0);
     }
 
     public Long getSeat() {
@@ -67,11 +69,11 @@ public class Ticket extends DomainObject implements Comparable<Ticket> {
         this.seat = seat;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -116,10 +118,10 @@ public class Ticket extends DomainObject implements Comparable<Ticket> {
 
     @Override
     public String toString() {
-        return "Ticket:\n" +
+        return "Ticket for data: " + Util.localDateTimeFormatterDay(dateTime) + ", at time: " +
+                Util.localDateTimeFormatterTime(dateTime) + "\n" +
                 user + "\n"+
-                event + "\n"+
-                "dateTime: " + dateTime + "\n"+
+                event.toStringWithoutSchedule() + "\n"+
                 "Seat: " + seat ;
     }
 }

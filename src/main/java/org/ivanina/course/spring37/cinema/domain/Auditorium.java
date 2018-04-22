@@ -4,8 +4,11 @@ import org.springframework.lang.NonNull;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 public class Auditorium extends DomainObject {
 
@@ -66,6 +69,12 @@ public class Auditorium extends DomainObject {
                     .collect(Collectors.toSet());
     }
 
+    public Set<Long> getSeats() {
+        return LongStream.rangeClosed(1L, numberOfSeats)
+                .boxed()
+                .collect( Collectors.toSet());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -83,6 +92,7 @@ public class Auditorium extends DomainObject {
 
     @Override
     public String toString() {
-        return "Auditorium '" + name +"'";
+        return "Auditorium '" + name +"' with "+numberOfSeats+" seats"+ (getId() != null ? " (ID: "+getId()+")" : "");
     }
+
 }

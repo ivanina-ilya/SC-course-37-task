@@ -22,4 +22,6 @@ public interface EventService extends Dao<Event> {
 
     Event getNewEvent(String name);
 
+    Set<Event> getAllFull();
+
 }

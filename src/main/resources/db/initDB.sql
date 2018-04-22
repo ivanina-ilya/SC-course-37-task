@@ -26,7 +26,7 @@ DROP TABLE IF EXISTS Events;
 CREATE TABLE Events
 (
   id BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-  basePrice DOUBLE,
+  basePrice DECIMAL,
   eventRating VARCHAR(32),
   name VARCHAR(64) NOT NULL,
   durationMilliseconds BIGINT
@@ -54,7 +54,7 @@ CREATE TABLE Tickets
   event_id BIGINT NOT NULL,
   dateTime DATETIME NOT NULL,
   seat INT,
-  price DOUBLE
+  price DECIMAL
 );
 
 DROP TABLE IF EXISTS TicketsToUser;

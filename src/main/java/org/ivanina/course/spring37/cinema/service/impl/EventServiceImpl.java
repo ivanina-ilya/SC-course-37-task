@@ -78,6 +78,13 @@ public class EventServiceImpl  implements EventService {
     }
 
     @Override
+    public Set<Event> getAllFull() {
+        return getAll().stream()
+                .map(event -> get(event.getId()))
+                .collect(Collectors.toSet());
+    }
+
+    @Override
     public Event get(Long id) {
         return eventDao.get(id);
     }

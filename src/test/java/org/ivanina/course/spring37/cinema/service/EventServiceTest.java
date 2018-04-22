@@ -7,12 +7,14 @@ import org.ivanina.course.spring37.cinema.config.JdbcConfig;
 import org.ivanina.course.spring37.cinema.domain.Event;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -72,14 +74,19 @@ public class EventServiceTest {
 
     @Test
     public void getSetBasePriceTest(){
-        //Event event = eventService.getByName("Harry Potter");
         Event event = new Event("Harry Potter 2");
-
-        //assertNull(event.getBasePrice());
-        //assertEquals(event.getBasePrice(),25.5, 0.001);
-        event.setBasePrice(100.00);
-        assertEquals(event.getBasePrice(),100.00, 0.001);
+        event.setBasePrice(new BigDecimal(100.00));
+        assertEquals(event.getBasePrice(), new BigDecimal(100.00));
     }
 
+    @Test
+    @Ignore
+    public void toStringTest(){
+        Set<Event> eventList = eventService.getAllFull();
+        Event event = eventList.stream().findFirst().get();
+
+        System.out.println(event);
+
+    }
 
 }

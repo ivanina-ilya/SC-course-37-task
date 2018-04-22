@@ -1,13 +1,14 @@
 package org.ivanina.course.spring37.cinema.domain;
 
+import org.ivanina.course.spring37.cinema.service.Util;
 import org.springframework.lang.NonNull;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.NavigableMap;
-import java.util.NavigableSet;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class Event extends DomainObject {
@@ -17,7 +18,7 @@ public class Event extends DomainObject {
 
     private NavigableSet<LocalDateTime> airDates = new TreeSet<>();
 
-    private Double basePrice;
+    private BigDecimal basePrice;
 
     private Long durationMilliseconds;
 
@@ -27,6 +28,13 @@ public class Event extends DomainObject {
 
     public Event(String name) {
         this.name = name;
+    }
+    public Event(Long id, String name, BigDecimal basePrice, Long durationMilliseconds, EventRating rating) {
+        this.setId(id);
+        this.name = name;
+        this.basePrice = basePrice;
+        this.durationMilliseconds = durationMilliseconds;
+        this.rating = rating;
     }
 
     public boolean assignAuditorium(LocalDateTime dateTime, Auditorium auditorium) {
@@ -85,6 +93,8 @@ public class Event extends DomainObject {
     }
 
     public NavigableSet<LocalDateTime> getAirDates() {
+        // THis is a logic mistake or I forgot what I wanted to do:
+        //return auditoriums != null ?  new TreeSet<>(auditoriums.keySet()) : null ;
         return airDates;
     }
 
@@ -93,11 +103,11 @@ public class Event extends DomainObject {
     }
 
 
-    public Double getBasePrice() {
+    public BigDecimal getBasePrice() {
         return basePrice;
     }
 
-    public void setBasePrice(Double basePrice) {
+    public void setBasePrice(BigDecimal basePrice) {
         this.basePrice = basePrice;
     }
 
@@ -144,7 +154,25 @@ public class Event extends DomainObject {
 
     @Override
     public String toString() {
-        return String.format("Event '%s' with %s rating; Price: %d (ID: %d)",
-                name, rating.name(), basePrice, getId()) ;
+        return String.format("Event '%s' with %s rating; Price: %s (ID: %d)\n    Schedule:\n%s",
+                name,
+                rating.name(),
+                NumberFormat.getCurrencyInstance().format(basePrice),
+                getId(),
+                getAuditoriums().entrySet().stream()
+                    .map(entry -> String.format("%10s%s. Auditorium: %s",
+                            "",
+                            Util.localDateTimeFormatterDayTime(entry.getKey()),
+                            entry.getValue().getName() ))
+                    .collect(Collectors.joining("\n")
+                ));
+    }
+
+    public String toStringWithoutSchedule() {
+        return String.format("Event '%s' with %s rating; Price: %s (ID: %d)",
+                name,
+                rating.name(),
+                NumberFormat.getCurrencyInstance().format(basePrice),
+                getId());
     }
 }
