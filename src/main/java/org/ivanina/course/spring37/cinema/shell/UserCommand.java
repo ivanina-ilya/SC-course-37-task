@@ -1,16 +1,15 @@
 package org.ivanina.course.spring37.cinema.shell;
 
 import org.ivanina.course.spring37.cinema.domain.Ticket;
+import org.ivanina.course.spring37.cinema.domain.User;
 import org.ivanina.course.spring37.cinema.service.BookingService;
-import org.ivanina.course.spring37.cinema.service.EventService;
+import org.ivanina.course.spring37.cinema.service.UserService;
 import org.ivanina.course.spring37.cinema.service.Util;
 import org.springframework.shell.core.CommandMarker;
 import org.springframework.shell.core.annotation.CliAvailabilityIndicator;
 import org.springframework.shell.core.annotation.CliCommand;
 import org.springframework.shell.core.annotation.CliOption;
 import org.springframework.shell.standard.ShellComponent;
-import org.ivanina.course.spring37.cinema.domain.User;
-import org.ivanina.course.spring37.cinema.service.UserService;
 
 import javax.annotation.Resource;
 import java.util.stream.Collectors;
@@ -50,14 +49,14 @@ public class UserCommand implements CommandMarker {
     public String getUserList() {
         return Util.shellOutputFormat(userService.getAll().stream()
                 .map(User::toString)
-                .collect(Collectors.joining("\n-------\n")) );
+                .collect(Collectors.joining("\n-------\n")));
     }
 
     @CliCommand(value = "getUserByEmail", help = "Get User by email if exists")
     public String getUserByEmail(
             @CliOption(key = {"email"}, mandatory = true, help = "E-Mail") final String email
     ) {
-        return Util.shellOutputFormat( userService.getUserByEmail(email).toString() );
+        return Util.shellOutputFormat(userService.getUserByEmail(email).toString());
     }
 
     @CliCommand(value = "getUserByEmail", help = "Get User by email if exists")
@@ -68,6 +67,6 @@ public class UserCommand implements CommandMarker {
         if (user == null) return "Does not exist user with email " + email;
         return Util.shellOutputFormat(bookingService.getPurchasedTicketsForUser(user).stream()
                 .map(Ticket::toString)
-                .collect(Collectors.joining("\n-------\n")) );
+                .collect(Collectors.joining("\n-------\n")));
     }
 }

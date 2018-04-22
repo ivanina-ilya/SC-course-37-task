@@ -8,5 +8,6 @@ import java.util.NavigableMap;
 
 public interface EventDao extends Dao<Event> {
     Event getByName(String name);
+
     NavigableMap<LocalDateTime, Auditorium> getEventAuditoriums(Long eventId);
 }

@@ -1,18 +1,13 @@
 package org.ivanina.course.spring37.cinema.service.impl;
 
 import org.ivanina.course.spring37.cinema.dao.AuditoriumDao;
-import org.ivanina.course.spring37.cinema.dao.DomainStore;
-import org.ivanina.course.spring37.cinema.service.EventService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.lang.Nullable;
 import org.ivanina.course.spring37.cinema.domain.Auditorium;
 import org.ivanina.course.spring37.cinema.service.AuditoriumService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
 
-import javax.annotation.PostConstruct;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 public class AuditoriumServiceImpl implements AuditoriumService {
 

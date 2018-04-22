@@ -1,18 +1,18 @@
 package org.ivanina.course.spring37.cinema.service;
 
 import org.apache.log4j.Logger;
+import org.ivanina.course.spring37.cinema.aspects.EventAspect;
+import org.ivanina.course.spring37.cinema.config.ApplicationSpringConfig;
 import org.ivanina.course.spring37.cinema.config.JdbcConfig;
+import org.ivanina.course.spring37.cinema.domain.Event;
+import org.ivanina.course.spring37.cinema.domain.EventRating;
+import org.ivanina.course.spring37.cinema.domain.User;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.ivanina.course.spring37.cinema.config.ApplicationSpringConfig;
-import org.ivanina.course.spring37.cinema.aspects.CounterAspect;
-import org.ivanina.course.spring37.cinema.domain.Event;
-import org.ivanina.course.spring37.cinema.domain.EventRating;
-import org.ivanina.course.spring37.cinema.domain.User;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -32,7 +32,7 @@ public class DiscountServiceTest {
     }
 
     @Autowired
-    private CounterAspect counterAspect;
+    private EventAspect eventAspect;
 
     @Autowired
     private AuditoriumService auditoriumService;
@@ -40,7 +40,7 @@ public class DiscountServiceTest {
 
     @After
     public void  afterEach(){
-        log.info("counterAspect: \n"+counterAspect);
+        log.info("counterAspect: \n"+ eventAspect);
     }
 
     @Test
@@ -58,7 +58,7 @@ public class DiscountServiceTest {
 
         user.setBirthday( dateTime.toLocalDate() );
         discount = discountService.getDiscount(user,event,dateTime,5);
-        assertEquals(5,discount);
+        assertEquals(10,discount);
 
         discount = discountService.getDiscount(user,event,dateTime,15);
         assertEquals(50,discount);

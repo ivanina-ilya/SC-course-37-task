@@ -1,10 +1,10 @@
 package org.ivanina.course.spring37.cinema.service;
 
+import org.ivanina.course.spring37.cinema.domain.Event;
 import org.ivanina.course.spring37.cinema.domain.Ticket;
+import org.ivanina.course.spring37.cinema.domain.User;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
-import org.ivanina.course.spring37.cinema.domain.Event;
-import org.ivanina.course.spring37.cinema.domain.User;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

@@ -3,7 +3,9 @@ package org.ivanina.course.spring37.cinema.shell;
 import org.ivanina.course.spring37.cinema.domain.Auditorium;
 import org.ivanina.course.spring37.cinema.domain.Event;
 import org.ivanina.course.spring37.cinema.domain.EventRating;
-import org.ivanina.course.spring37.cinema.service.*;
+import org.ivanina.course.spring37.cinema.service.AuditoriumService;
+import org.ivanina.course.spring37.cinema.service.EventService;
+import org.ivanina.course.spring37.cinema.service.Util;
 import org.springframework.shell.core.CommandMarker;
 import org.springframework.shell.core.annotation.CliAvailabilityIndicator;
 import org.springframework.shell.core.annotation.CliCommand;
@@ -113,7 +115,7 @@ public class EventsCommand implements CommandMarker {
             Auditorium auditorium = event.getAuditoriums().get(Util.localDateTimeParse(dateTime));
             return getVipSeats(auditorium).stream()
                     .map(Object::toString).collect(Collectors.joining(", "));
-        } catch (Exception e){
+        } catch (Exception e) {
             return e.getMessage();
         }
 
@@ -132,15 +134,16 @@ public class EventsCommand implements CommandMarker {
 
     }
 
-    private Set<Long> getVipSeats(Long auditoriumId){
+    private Set<Long> getVipSeats(Long auditoriumId) {
         Auditorium auditorium = auditoriumService.get(auditoriumId);
         if (auditorium == null) throw new IllegalArgumentException("Does not exist Auditorium with ID " + auditoriumId);
         return getVipSeats(auditorium);
     }
 
-    private Set<Long> getVipSeats(Auditorium auditorium){
+    private Set<Long> getVipSeats(Auditorium auditorium) {
         if (auditorium == null) throw new IllegalArgumentException("Does not exist Auditorium ");
-        if (auditorium.getVipSeats() == null) throw new IllegalArgumentException("No VIP seats in Auditorium:" + auditorium);
+        if (auditorium.getVipSeats() == null)
+            throw new IllegalArgumentException("No VIP seats in Auditorium:" + auditorium);
         return auditorium.getVipSeats();
     }
 }

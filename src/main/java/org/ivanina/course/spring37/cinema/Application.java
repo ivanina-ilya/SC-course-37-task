@@ -2,7 +2,6 @@ package org.ivanina.course.spring37.cinema;
 
 import org.ivanina.course.spring37.cinema.config.ApplicationSpringConfig;
 import org.ivanina.course.spring37.cinema.config.JdbcConfig;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 

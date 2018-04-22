@@ -8,10 +8,12 @@ public enum EventRating {
     HIGH(new BigDecimal(1.2));
 
     private final BigDecimal coefficient;
-    EventRating(BigDecimal coefficient){
+
+    EventRating(BigDecimal coefficient) {
         this.coefficient = coefficient;
     }
-    public BigDecimal getCoefficient(){
+
+    public BigDecimal getCoefficient() {
         return coefficient;
     }
 

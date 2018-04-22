@@ -4,10 +4,8 @@ import org.springframework.lang.NonNull;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
 public class Auditorium extends DomainObject {
@@ -22,6 +20,7 @@ public class Auditorium extends DomainObject {
     public Auditorium(String name) {
         this.name = name;
     }
+
     public Auditorium(Long id, String name, Long numberOfSeats, Set<Long> vipSeats) {
         this.setId(id);
         this.name = name;
@@ -53,7 +52,7 @@ public class Auditorium extends DomainObject {
         this.vipSeats = vipSeats;
     }
 
-    public String vipSeatsToString(){
+    public String vipSeatsToString() {
         return vipSeats == null ?
                 "" :
                 vipSeats.stream()
@@ -61,18 +60,18 @@ public class Auditorium extends DomainObject {
                         .collect(Collectors.joining(","));
     }
 
-    public static Set<Long> vipSeatsParse(String seats){
+    public static Set<Long> vipSeatsParse(String seats) {
         return seats == null || seats.length() == 0 ?
                 null :
                 Arrays.stream(seats.split(","))
-                    .map(Long::parseLong)
-                    .collect(Collectors.toSet());
+                        .map(Long::parseLong)
+                        .collect(Collectors.toSet());
     }
 
     public Set<Long> getSeats() {
         return LongStream.rangeClosed(1L, numberOfSeats)
                 .boxed()
-                .collect( Collectors.toSet());
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -92,7 +91,7 @@ public class Auditorium extends DomainObject {
 
     @Override
     public String toString() {
-        return "Auditorium '" + name +"' with "+numberOfSeats+" seats"+ (getId() != null ? " (ID: "+getId()+")" : "");
+        return "Auditorium '" + name + "' with " + numberOfSeats + " seats" + (getId() != null ? " (ID: " + getId() + ")" : "");
     }
 
 }

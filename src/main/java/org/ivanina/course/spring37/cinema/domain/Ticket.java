@@ -120,8 +120,8 @@ public class Ticket extends DomainObject implements Comparable<Ticket> {
     public String toString() {
         return "Ticket for data: " + Util.localDateTimeFormatterDay(dateTime) + ", at time: " +
                 Util.localDateTimeFormatterTime(dateTime) + "\n" +
-                user + "\n"+
-                event.toStringWithoutSchedule() + "\n"+
-                "Seat: " + seat ;
+                user + "\n" +
+                event.toStringWithoutSchedule() + "\n" +
+                "Seat: " + seat;
     }
 }

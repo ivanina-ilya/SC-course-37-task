@@ -9,18 +9,18 @@
   - [x] calculate discount (build in purchase a ticket)
 
 ### Messing
-- [ ] LuckyWinner functional
+- [x] LuckyWinner functional
 
 ### List for AOP
 
-- [ ] implement all counters by task
-  - [ ] access to event by name
-  - [ ] get price of event (base-price)
-  - [ ] discount queried
-  - [ ] booked tickets
+- [x] implement all counters by task
+  - [x] access to event by name
+  - [x] get price of event (base-price)
+  - [x] discount queried
+  - [x] booked tickets
   - [ ] LuckyWinner count
-- [ ] create separate tests
-- [ ] store counts to DB
+- [ ] create separate tests ( Messing )
+- [x] store counts to DB
 
 ### Entities handling (by shell interface)
 

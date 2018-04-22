@@ -65,3 +65,14 @@ CREATE TABLE TicketsToUser
   user_id BIGINT NOT NULL
 );
 CREATE UNIQUE INDEX TicketsToUser_ticket_id_user_id_uindex ON TicketsToUser (ticket_id, user_id);
+
+
+DROP TABLE IF EXISTS Counter;
+
+CREATE TABLE Counter
+(
+  id BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+  key VARCHAR(64) NOT NULL,
+  count BIGINT DEFAULT 0 NOT NULL
+);
+CREATE UNIQUE INDEX Counter_key_uindex ON Counter (key);

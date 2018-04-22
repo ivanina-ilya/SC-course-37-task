@@ -1,12 +1,11 @@
 package org.ivanina.course.spring37.cinema.service;
 
 import org.apache.log4j.Logger;
+import org.ivanina.course.spring37.cinema.aspects.EventAspect;
 import org.ivanina.course.spring37.cinema.config.ApplicationSpringConfig;
-import org.ivanina.course.spring37.cinema.aspects.CounterAspect;
 import org.ivanina.course.spring37.cinema.config.JdbcConfig;
 import org.ivanina.course.spring37.cinema.domain.Event;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,8 +14,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -34,12 +31,12 @@ public class EventServiceTest {
     }
 
     @Autowired
-    private CounterAspect counterAspect;
+    private EventAspect eventAspect;
 
 
     @After
     public void  afterEach(){
-        log.info("counterAspect: \n"+counterAspect);
+        log.info("counterAspect: \n"+ eventAspect);
     }
 
     @Test

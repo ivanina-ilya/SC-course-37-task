@@ -16,10 +16,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.IllegalFormatConversionException;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -64,23 +64,15 @@ public class BookingServiceTest {
     @Test
     public void getTicketsPriceTest(){
         Set<Long> seats = new HashSet<>(Arrays.asList(15L,16L,17L) );
-        BigDecimal difference = new BigDecimal(6);
-
-        BigDecimal basePrice = event.getBasePrice();
-        BigDecimal price1 = bookingService.getTicketsPrice( event, dateTime, user, seats );
-
-        assertEquals(event.getBasePrice().add(difference), price1);
+        assertEquals(event.getBasePrice(), bookingService.getTicketsPrice( event, dateTime, user, seats ));
     }
 
     @Test
     public void getTicketsPriceDiscountTest(){
         Set<Long> seats = new HashSet<>(Arrays.asList(15L,16L,17L,1L,2L,3L,4L,5L,6L,7L,8L) );
-        BigDecimal difference = new BigDecimal(-12);
-
-        BigDecimal basePrice = event.getBasePrice();
-
+        BigDecimal difference =  event.getBasePrice().multiply( new BigDecimal(50) ).divide(new BigDecimal(100));
         assertEquals(
-                event.getBasePrice().add(difference),
+                event.getBasePrice().subtract(difference).setScale(2, RoundingMode.HALF_UP),
                 bookingService.getTicketsPrice( event, dateTime, user, seats )
         );
     }

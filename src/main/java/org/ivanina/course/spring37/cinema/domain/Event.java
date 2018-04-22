@@ -7,7 +7,10 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.NavigableMap;
+import java.util.NavigableSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 
@@ -29,6 +32,7 @@ public class Event extends DomainObject {
     public Event(String name) {
         this.name = name;
     }
+
     public Event(Long id, String name, BigDecimal basePrice, Long durationMilliseconds, EventRating rating) {
         this.setId(id);
         this.name = name;
@@ -71,7 +75,7 @@ public class Event extends DomainObject {
 
     public boolean airsOnDateTime(LocalDateTime dateTime) {
         return airDates.stream().anyMatch(
-                dt -> dateTime.isAfter(dt) && dateTime.isBefore(dt.plusSeconds( durationMilliseconds/1000 ))  );
+                dt -> dateTime.isAfter(dt) && dateTime.isBefore(dt.plusSeconds(durationMilliseconds / 1000)));
     }
 
     public boolean airsOnDate(LocalDate date) {
@@ -125,8 +129,8 @@ public class Event extends DomainObject {
 
     public void setAuditoriums(NavigableMap<LocalDateTime, Auditorium> auditoriums) {
         this.auditoriums = auditoriums;
-        if(this.airDates == null) this.airDates = new TreeSet<>();
-        this.airDates.addAll( auditoriums.keySet() );
+        if (this.airDates == null) this.airDates = new TreeSet<>();
+        this.airDates.addAll(auditoriums.keySet());
     }
 
     public Long getDurationMilliseconds() {
@@ -160,12 +164,12 @@ public class Event extends DomainObject {
                 NumberFormat.getCurrencyInstance().format(basePrice),
                 getId(),
                 getAuditoriums().entrySet().stream()
-                    .map(entry -> String.format("%10s%s. Auditorium: %s",
-                            "",
-                            Util.localDateTimeFormatterDayTime(entry.getKey()),
-                            entry.getValue().getName() ))
-                    .collect(Collectors.joining("\n")
-                ));
+                        .map(entry -> String.format("%10s%s. Auditorium: %s",
+                                "",
+                                Util.localDateTimeFormatterDayTime(entry.getKey()),
+                                entry.getValue().getName()))
+                        .collect(Collectors.joining("\n")
+                        ));
     }
 
     public String toStringWithoutSchedule() {
