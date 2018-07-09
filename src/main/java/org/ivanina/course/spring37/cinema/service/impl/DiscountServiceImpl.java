@@ -58,7 +58,7 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public byte getDiscountByBirthday(@Nullable User user, LocalDateTime airDateTime) {
-        if (user.getBirthday() != null &&
+        if (user != null && user.getBirthday() != null &&
                 user.getBirthday().isAfter(airDateTime.toLocalDate().minusDays(discountBirthdayInterval)) &&
                 user.getBirthday().isBefore(airDateTime.toLocalDate().plusDays(discountBirthdayInterval)))
             return discountByBirthday;
@@ -67,7 +67,7 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public byte getDiscountByCount(@Nullable User user, long numberOfTickets) {
-        if (numberOfTickets >= discountCountLimit || (user.getTickets().size() + 1) % discountCountLimit == 0)
+        if (numberOfTickets >= discountCountLimit || (user != null && (user.getTickets().size() + 1) % discountCountLimit == 0))
             return discountByCount;
         return 0;
     }
